@@ -1,0 +1,2577 @@
+{
+	"info": {
+		"_postman_id": "92451d69-5235-49c5-8856-417f8bbc16d1",
+		"name": "Contact List Security Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication Tests",
+			"item": [
+				{
+					"name": "Login Tests",
+					"item": [
+						{
+							"name": "Setup: Add User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();",
+											"pm.environment.set(\"userId\", jsonData.user._id)",
+											"pm.environment.set(\"token\", jsonData.token)",
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"firstName\", pm.variables.replaceIn('{{$randomFirstName}}'));",
+											"pm.environment.set(\"lastName\", pm.variables.replaceIn('{{$randomLastName}}'));",
+											"pm.environment.set(\"email\", pm.variables.replaceIn('{{$randomEmail}}').toLowerCase());"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"firstName\": \"{{firstName}}\",\n    \"lastName\": \"{{lastName}}\",\n    \"email\": \"{{email}}\",\n    \"password\": \"Password123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/users",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Setup: Log Out User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/users/logout",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"users",
+										"logout"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Empty|Empty",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"\",\n    \"password\": \"\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/users/login",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"users",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Empty|Incorrect",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"\",\n    \"password\": \"wrongwrong\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/users/login",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"users",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Empty|Wrong Case",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"\",\n    \"password\": \"password123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/users/login",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"users",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Empty|Correct",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"\",\n    \"password\": \"Password123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/users/login",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"users",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Incorrect|Empty",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"wrong@wrong.com\",\n    \"password\": \"\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/users/login",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"users",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Incorrect|Incorrect",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"wrong@wrong.com\",\n    \"password\": \"wrongwrong\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/users/login",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"users",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Incorrect|Wrong Case",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"wrong@wrong.com\",\n    \"password\": \"password123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/users/login",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"users",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Incorrect|Correct",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"wrong@wrong.com\",\n    \"password\": \"Password123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/users/login",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"users",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Correct|Empty",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/users/login",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"users",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Correct|Incorrect",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"wrongwrong\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/users/login",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"users",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Correct|Wrong Case",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"password123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/users/login",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"users",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cleanup: Log In User",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();",
+											"pm.environment.set(\"token\", jsonData.token)",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"Password123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/users/login",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"users",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cleanup: Delete User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/users/me",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"users",
+										"me"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Token Tests",
+					"item": [
+						{
+							"name": "Setup: Add User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();",
+											"pm.environment.set(\"userId\", jsonData.user._id)",
+											"pm.environment.set(\"token\", jsonData.token)",
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"firstName\", pm.variables.replaceIn('{{$randomFirstName}}'));",
+											"pm.environment.set(\"lastName\", pm.variables.replaceIn('{{$randomLastName}}'));",
+											"pm.environment.set(\"email\", pm.variables.replaceIn('{{$randomEmail}}').toLowerCase());",
+											"pm.environment.set(\"password\", pm.variables.replaceIn('{{$randomPassword}}'));",
+											"pm.environment.set(\"tokenNotFound\", pm.variables.replaceIn('{{$guid}}'))"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"firstName\": \"{{firstName}}\",\n    \"lastName\": \"{{lastName}}\",\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/users",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Setup: Add Contact",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();",
+											"pm.environment.set(\"contactId\", jsonData._id);",
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"firstName\": \"Prunella\",\n    \"lastName\": \"Prunewhip\",\n    \"birthdate\": \"1977-07-04\",\n    \"email\": \"foo@bar.com\",\n    \"phone\": \"8005551000\",\n    \"street1\": \"1 Main St.\",\n    \"street2\": \"Apartment Q\",\n    \"city\": \"Anytown\",\n    \"stateProvince\": \"KS\",\n    \"postalCode\": \"12345\",\n    \"country\": \"USA\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"contacts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Contact: Missing Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"firstName\": \"Prunella\",\n    \"lastName\": \"Prunewhip\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"contacts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Contact: Token Not Found",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDI1ZTA0NDk0Mjk1MjEyOTE1NTIzMzgiLCJpYXQiOjE2MTMwOTQ5OTV9.uCH2wHB4zoq5OAjSY5JmpTLYnjEeQEhu8JhwUqO7yK8",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"firstName\": \"Prunella\",\n    \"lastName\": \"Prunewhip\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"contacts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Contact: Invalid Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer FOO",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"firstName\": \"Prunella\",\n    \"lastName\": \"Prunewhip\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"contacts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Contact List: Missing Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"contacts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Contact List: Token Not Found",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDI1ZTA0NDk0Mjk1MjEyOTE1NTIzMzgiLCJpYXQiOjE2MTMwOTQ5OTV9.uCH2wHB4zoq5OAjSY5JmpTLYnjEeQEhu8JhwUqO7yK8",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"contacts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Contact List: Invalid Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer FOO",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"contacts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Contact: Missing Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/{{contactId}}",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"contacts",
+										"{{contactId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Contact: Token Not Found",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDI1ZTA0NDk0Mjk1MjEyOTE1NTIzMzgiLCJpYXQiOjE2MTMwOTQ5OTV9.uCH2wHB4zoq5OAjSY5JmpTLYnjEeQEhu8JhwUqO7yK8",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/{{contactId}}",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"contacts",
+										"{{contactId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Contact: Invalid Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer FOO",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/{{contactId}}",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"contacts",
+										"{{contactId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Contact: Missing Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"firstName\": \"Joe\",\n    \"lastName\": \"Schmoe\",\n    \"birthdate\": \"1980-06-30\",\n    \"email\": \"fake@foo.com\",\n    \"phone\": \"8005551001\",\n    \"street1\": \"2 Elm St.\",\n    \"street2\": \"Unit 2\",\n    \"city\": \"Springfield\",\n    \"stateProvince\": \"ON\",\n    \"postalCode\": \"L8R 1P8\",\n    \"country\": \"Canada\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/{{contactId}}",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"contacts",
+										"{{contactId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Contact: Token Not Found",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDI1ZTA0NDk0Mjk1MjEyOTE1NTIzMzgiLCJpYXQiOjE2MTMwOTQ5OTV9.uCH2wHB4zoq5OAjSY5JmpTLYnjEeQEhu8JhwUqO7yK8",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"firstName\": \"Joe\",\n    \"lastName\": \"Schmoe\",\n    \"birthdate\": \"1980-06-30\",\n    \"email\": \"fake@foo.com\",\n    \"phone\": \"8005551001\",\n    \"street1\": \"2 Elm St.\",\n    \"street2\": \"Unit 2\",\n    \"city\": \"Springfield\",\n    \"stateProvince\": \"ON\",\n    \"postalCode\": \"L8R 1P8\",\n    \"country\": \"Canada\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/{{contactId}}",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"contacts",
+										"{{contactId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Contact: Invalid Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer FOO",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"firstName\": \"Joe\",\n    \"lastName\": \"Schmoe\",\n    \"birthdate\": \"1980-06-30\",\n    \"email\": \"fake@foo.com\",\n    \"phone\": \"8005551001\",\n    \"street1\": \"2 Elm St.\",\n    \"street2\": \"Unit 2\",\n    \"city\": \"Springfield\",\n    \"stateProvince\": \"ON\",\n    \"postalCode\": \"L8R 1P8\",\n    \"country\": \"Canada\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/{{contactId}}",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"contacts",
+										"{{contactId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Partial Update Contact: Missing Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"firstName\": \"Kristin\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/{{contactId}}",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"contacts",
+										"{{contactId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Partial Update Contact: Token Not Found",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDI1ZTA0NDk0Mjk1MjEyOTE1NTIzMzgiLCJpYXQiOjE2MTMwOTQ5OTV9.uCH2wHB4zoq5OAjSY5JmpTLYnjEeQEhu8JhwUqO7yK8",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"firstName\": \"Kristin\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/{{contactId}}",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"contacts",
+										"{{contactId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Partial Update Contact: Invalid Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer FOO",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"firstName\": \"Kristin\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/{{contactId}}",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"contacts",
+										"{{contactId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Contact: Missing Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/{{contactId}}",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"contacts",
+										"{{contactId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Contact: Token Not Found",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDI1ZTA0NDk0Mjk1MjEyOTE1NTIzMzgiLCJpYXQiOjE2MTMwOTQ5OTV9.uCH2wHB4zoq5OAjSY5JmpTLYnjEeQEhu8JhwUqO7yK8",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/{{contactId}}",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"contacts",
+										"{{contactId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Contact: Invalid Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer FOO",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/{{contactId}}",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"contacts",
+										"{{contactId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cleanup: Delete Contact",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"Deletion success message received\", function () {",
+											"    pm.response.to.have.body(\"Contact deleted\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/{{contactId}}",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"contacts",
+										"{{contactId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://thinking-tester-contact-list.herokuapp.com/users/me",
+									"protocol": "https",
+									"host": [
+										"thinking-tester-contact-list",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"users",
+										"me"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Authorization Tests",
+			"item": [
+				{
+					"name": "Setup: Add User 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"userId2\", jsonData.user._id)",
+									"pm.environment.set(\"token2\", jsonData.token)",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"email2\", pm.variables.replaceIn('{{$randomEmail}}').toLowerCase());",
+									"pm.environment.set(\"password2\", pm.variables.replaceIn('{{$randomPassword}}'));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Test\",\n    \"lastName\": \"User2\",\n    \"email\": \"{{email2}}\",\n    \"password\": \"{{password2}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://thinking-tester-contact-list.herokuapp.com/users",
+							"protocol": "https",
+							"host": [
+								"thinking-tester-contact-list",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Setup: Add User 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"userId1\", jsonData.user._id)",
+									"pm.environment.set(\"token1\", jsonData.token)",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"email1\", pm.variables.replaceIn('{{$randomEmail}}').toLowerCase());",
+									"pm.environment.set(\"password1\", pm.variables.replaceIn('{{$randomPassword}}'));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Test\",\n    \"lastName\": \"User1\",\n    \"email\": \"{{email1}}\",\n    \"password\": \"{{password1}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://thinking-tester-contact-list.herokuapp.com/users",
+							"protocol": "https",
+							"host": [
+								"thinking-tester-contact-list",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Contact 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"contactId1\", jsonData._id);",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Prunella\",\n    \"lastName\": \"Prunewhip\",\n    \"birthdate\": \"1977-07-04\",\n    \"email\": \"foo@bar.com\",\n    \"phone\": \"8005551000\",\n    \"street1\": \"1 Main St.\",\n    \"street2\": \"Apartment Q\",\n    \"city\": \"Anytown\",\n    \"stateProvince\": \"KS\",\n    \"postalCode\": \"12345\",\n    \"country\": \"USA\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts",
+							"protocol": "https",
+							"host": [
+								"thinking-tester-contact-list",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Contact 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"contactId2\", jsonData._id);",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token2}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Joe\",\n    \"lastName\": \"Schmoe\",\n    \"birthdate\": \"1980-06-30\",\n    \"email\": \"fake@foo.com\",\n    \"phone\": \"8005551001\",\n    \"street1\": \"2 Elm St.\",\n    \"street2\": \"Unit 2\",\n    \"city\": \"Springfield\",\n    \"stateProvince\": \"ON\",\n    \"postalCode\": \"L8R 1P8\",\n    \"country\": \"Canada\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts",
+							"protocol": "https",
+							"host": [
+								"thinking-tester-contact-list",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Contact List as User 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"var jsonData = pm.response.json();",
+									"pm.test(\"One record is returned\", function () {",
+									"    pm.expect(jsonData.length).to.equal(1);",
+									"});",
+									"pm.test(\"ID is correct\", function () {",
+									"    pm.expect(jsonData[0]._id).to.eql(environment.contactId1);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token1}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts",
+							"protocol": "https",
+							"host": [
+								"thinking-tester-contact-list",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Contact List as User 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"var jsonData = pm.response.json();",
+									"pm.test(\"One record is returned\", function () {",
+									"    pm.expect(jsonData.length).to.equal(1);",
+									"});",
+									"pm.test(\"ID is correct\", function () {",
+									"    pm.expect(jsonData[0]._id).to.eql(environment.contactId2);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token2}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts",
+							"protocol": "https",
+							"host": [
+								"thinking-tester-contact-list",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Contact 1 as User 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token2}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/{{contactId1}}",
+							"protocol": "https",
+							"host": [
+								"thinking-tester-contact-list",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"contacts",
+								"{{contactId1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Contact 2 as User 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token1}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/{{contactId2}}",
+							"protocol": "https",
+							"host": [
+								"thinking-tester-contact-list",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"contacts",
+								"{{contactId2}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Contact 1 as User 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token2}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Serge\",\n    \"lastName\": \"Roger\",\n    \"birthdate\": \"1996-06-21\",\n    \"email\": \"myfakeemail@fake.com\",\n    \"phone\": \"8005551002\",\n    \"street1\": \"22 Broadway\",\n    \"street2\": \"Apt. 3\",\n    \"city\": \"Gotham\",\n    \"stateProvince\": \"NY\",\n    \"postalCode\": \"23456\",\n    \"country\": \"USA\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/{{contactId1}}",
+							"protocol": "https",
+							"host": [
+								"thinking-tester-contact-list",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"contacts",
+								"{{contactId1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Contact 2 as User 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Serge\",\n    \"lastName\": \"Roger\",\n    \"birthdate\": \"1996-06-21\",\n    \"email\": \"myfakeemail@fake.com\",\n    \"phone\": \"8005551002\",\n    \"street1\": \"22 Broadway\",\n    \"street2\": \"Apt. 3\",\n    \"city\": \"Gotham\",\n    \"stateProvince\": \"NY\",\n    \"postalCode\": \"23456\",\n    \"country\": \"USA\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/{{contactId2}}",
+							"protocol": "https",
+							"host": [
+								"thinking-tester-contact-list",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"contacts",
+								"{{contactId2}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Contact 1 as User 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token2}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Kristin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/{{contactId1}}",
+							"protocol": "https",
+							"host": [
+								"thinking-tester-contact-list",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"contacts",
+								"{{contactId1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Contact 2 as User 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Kristin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/{{contactId2}}",
+							"protocol": "https",
+							"host": [
+								"thinking-tester-contact-list",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"contacts",
+								"{{contactId2}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Contact 1 as User 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token2}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/{{contactId1}}",
+							"protocol": "https",
+							"host": [
+								"thinking-tester-contact-list",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"contacts",
+								"{{contactId1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Contact 2 as User 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token1}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/{{contactId2}}",
+							"protocol": "https",
+							"host": [
+								"thinking-tester-contact-list",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"contacts",
+								"{{contactId2}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cleanup: Contact 1 as User 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Deletion success message received\", function () {",
+									"    pm.response.to.have.body(\"Contact deleted\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token1}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/{{contactId1}}",
+							"protocol": "https",
+							"host": [
+								"thinking-tester-contact-list",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"contacts",
+								"{{contactId1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cleanup: Contact 2 as User 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Deletion success message received\", function () {",
+									"    pm.response.to.have.body(\"Contact deleted\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token2}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/{{contactId2}}",
+							"protocol": "https",
+							"host": [
+								"thinking-tester-contact-list",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"contacts",
+								"{{contactId2}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cleanup: Delete User 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token1}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://thinking-tester-contact-list.herokuapp.com/users/me",
+							"protocol": "https",
+							"host": [
+								"thinking-tester-contact-list",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cleanup: Delete User 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token2}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://thinking-tester-contact-list.herokuapp.com/users/me",
+							"protocol": "https",
+							"host": [
+								"thinking-tester-contact-list",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
